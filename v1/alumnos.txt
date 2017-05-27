@@ -1,0 +1,2 @@
+abc;rodrigo;mistogun;sceptile@hotmail.com;-125;28
+bcd;asd;asdas;as@dsa.com;50;-124
