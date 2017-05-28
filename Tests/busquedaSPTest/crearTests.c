@@ -5,7 +5,7 @@
 const char SISTEMA = 'S';
 const char PLANETA = 'P';
 const char SEPARADOR_ALUMNOS_TXT = ';';
-const long INICIALIZAR_CONTADOR = 1;
+const long INICIALIZAR_CONTADOR = 0;
 
 // CONSTANTES ARCHIVOS
 const char ALUMNOS_TXT[] = "alumnos.txt";

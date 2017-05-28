@@ -1,5 +1,4 @@
-abc;ACTUALIZADO;ASDa;DSADAs;4;-124
-abce;ACTUALIZADO;ASDa;DSADAs;4;-124
+abc;rodrigo;mistogun;sceptile@hotmail.com;-125;2
 bcd;asd;asdas;as@dsa.com;5;-124
 cde;asdA;ASDa;DSADAs;5;-124
 def;asdA;ASDa;DSADAs;-125;4
