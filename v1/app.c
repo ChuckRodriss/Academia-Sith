@@ -9,6 +9,8 @@ const char SEPARADOR_ALUMNOS_TXT = ';';
 
 // CONSTANTES ARCHIVOS
 const char ALUMNOS_TXT[] = "alumnos.txt";
+const char ACTUALIZACION_ALUMNOS_TXT[] = "alumnos.txt";
+
 
 // CONSTANTES TAMANIOS VECTORES
 #define CORRECTOR_TAMANIO_VECTOR_A_STRING = 1
@@ -16,6 +18,8 @@ const char ALUMNOS_TXT[] = "alumnos.txt";
 #define TAMANIO_NOMBRE_ALUMNO 21
 #define TAMANIO_APELLIDO_ALUMNO 21
 #define TAMANIO_EMAIL_ALUMNO 101
+#define TAMANIO_MAYOR_STRING_ALUMNO 101
+
 #define TAMANIO_FECHA_ALUMNO_CURSO 9
 #define TAMANIO_DESCRIPCION_ALUMNO_CURSO 51
 #define TAMANIO_CODIGO_SISTPLAN_STRING 20
@@ -56,27 +60,31 @@ void imprimirAlumnoEnTxt(FILE	* archivo, Alumno alumno);
 void inicializarUnAlumno(Alumno * alumno);
 void imprimirAlumnoEnTxt(FILE	* archivo, Alumno alumno);
 void mostrarAlumno(Alumno alumno);
-void constructorAlumno(char codigo[], char nombre[], char apellido[], char email[], long sistema, long planeta);
+Alumno constructorAlumno(char codigo[], char nombre[], char apellido[], char email[], long sistema, long planeta);
+int hayErrorEnDatosAlumno(Alumno alumno);
+void leerArchivoActualizacionAlumnos(Alumno alumnos[], long * tope, FILE * alumnosActualizados);
+bool cargarAtributoAlumnoTxt(char atributo[], FILE * archivoAbierto);
 
-
-
-// FUNCIONES TRUCHAS
-
+/**
+	*
+	*
+	*
+	*
+	*
+*/
 int main(int argc, char const *argv[]) {
 	FILE * fp, * fpSP;
 	char dEnc;
-	Alumno unAlumno;
+	Alumno unAlumno, vectorA[100];
+	long tope;
 	fp = fopen(ALUMNOS_TXT, "r");
-/*
-	inicializarUnAlumno(&unAlumno);
-//	unAlumno.codigoSistemaOrigen = 2222;
-	imprimirAlumnoEnTxt(fp, unAlumno);
-*/
-	leerUnAlumnoTxt(&unAlumno, fp);
-	leerUnAlumnoTxt(&unAlumno, fp);
 
-	mostrarAlumno(unAlumno);
+	leerArchivoActualizacionAlumnos(vectorA, &tope, fp);
+	for (long i = 0; i < tope; i++) {
+		mostrarAlumno(vectorA[i]);
+	}
 
+	printf("%d\n", FOPEN_MAX );
 	fclose(fp);
 	return 0;
 }
@@ -85,75 +93,59 @@ void leerArchivoActualizacionAlumnos(Alumno alumnos[], long * tope, FILE * alumn
 	char c;
 	long i = 0;
 	while(!feof(alumnosActualizados)) {
-		leerUnAlumnoTxt(alumnos+i, alumnosActualizados;);
-		if (!hayErrorEnDatosAlumno(alumno[i])) {
+		leerUnAlumnoTxt(alumnos+i, alumnosActualizados);
+		if (!hayErrorEnDatosAlumno(alumnos[i])) {
+//			mostrarAlumno(alumnos[i]);
 			i++;
 		}
 	}
-	*tope = int;
+	*tope = i;
 }
 
-bool hayErrorEnDatosAlumno(Alumno alumno) {
+int hayErrorEnDatosAlumno(Alumno alumno) {
+	if (strcmp(alumno.codigo, "") == 0) return ERROR_CODIGO_ALUMNO_VACIO;
+
 	return false;
 }
 
 void leerUnAlumnoTxt(Alumno * alumno, FILE * archivoAbierto) {
 	int i;
-	char c, codigo[TAMANIO_CODIGO_SISTPLAN_STRING];
+	char atributo[TAMANIO_MAYOR_STRING_ALUMNO];
 
-	// Leer Codigo
-	i = 0;
-	while ((c = fgetc(archivoAbierto)) != SEPARADOR_ALUMNOS_TXT) {
-		alumno->codigo[i] = c;
-		i++;
+	// Controlo que el archivo no esté terminado
+	if (!cargarAtributoAlumnoTxt(atributo, archivoAbierto)) {
+		return;
 	}
-	alumno->codigo[i] = '\0';
-	// Leer Nombre
-	i = 0;
-	while ((c = fgetc(archivoAbierto)) != SEPARADOR_ALUMNOS_TXT) {
-		alumno->nombre[i] = c;
-		i++;
-	}
-	alumno->nombre[i] = '\0';
-	// Leer Apellido
-	i = 0;
-	while ((c = fgetc(archivoAbierto)) != SEPARADOR_ALUMNOS_TXT) {
-		alumno->apellido[i] = c;
-		i++;
-	}
-	alumno->apellido[i] = '\0';
-	// Leer Email
-	i = 0;
-	while ((c = fgetc(archivoAbierto)) != SEPARADOR_ALUMNOS_TXT) {
-		alumno->email[i] = c;
-		i++;
-	}
-	alumno->email[i] = '\0';
+	strcpy(alumno->codigo, atributo);
+	cargarAtributoAlumnoTxt(atributo, archivoAbierto);
+	strcpy(alumno->nombre, atributo);
+	cargarAtributoAlumnoTxt(atributo, archivoAbierto);
+	strcpy(alumno->apellido, atributo);
+	cargarAtributoAlumnoTxt(atributo, archivoAbierto);
+	strcpy(alumno->email, atributo);
 	// Leer Codigo Sistema
-	i = 0;
-	while ((c = fgetc(archivoAbierto)) != SEPARADOR_ALUMNOS_TXT) {
-		codigo[i] = c;
-		i++;
-	}
-	codigo[i] = '\0';
-	alumno->codigoSistemaOrigen = (strcmp(codigo, "") == 0) ? ALUMNO_NO_PROVIENE_SISTEMA : atol(codigo);
+	cargarAtributoAlumnoTxt(atributo, archivoAbierto);
+	alumno->codigoSistemaOrigen = (strcmp(atributo, "") == 0) ? ALUMNO_NO_PROVIENE_SISTEMA : atol(atributo);
 	// Leer Codigo Planeta
-	i = 0;
-	while ((c = fgetc(archivoAbierto)) != '\n') {
-		codigo[i] = c;
+	cargarAtributoAlumnoTxt(atributo, archivoAbierto);
+	alumno->codigoPlanetaOrigen = (strcmp(atributo, "") == 0) ? ALUMNO_NO_PROVIENE_PLANETA : atol(atributo);
+}
+
+bool cargarAtributoAlumnoTxt(char atributo[], FILE * archivoAbierto) {
+	int i = 0;
+	char c;
+	while ((c = fgetc(archivoAbierto)) != SEPARADOR_ALUMNOS_TXT && c != '\n') {
+		// TERMINA EL ARCHIVO
+		if (feof(archivoAbierto)) return false;
+		atributo[i] = c;
 		i++;
 	}
-	codigo[i] = '\0';
-	alumno->codigoPlanetaOrigen = (strcmp(codigo, "") == 0) ? ALUMNO_NO_PROVIENE_PLANETA : atol(codigo);
+	atributo[i] = '\0';
+	return true;
 }
 
 void inicializarUnAlumno(Alumno * alumno) {
-	strcpy(alumno->codigo, "abc");
-	strcpy(alumno->nombre, "rodrigo");
-	strcpy(alumno->apellido, "mistogun");
-	strcpy(alumno->email, "sceptile@hotmail.com");
-	alumno->codigoSistemaOrigen = ALUMNO_NO_PROVIENE_SISTEMA;
-	alumno->codigoPlanetaOrigen = 28;
+	*alumno = constructorAlumno("abc", "rodrigo", "mistogun", "sceptile@hotmail.com", ALUMNO_NO_PROVIENE_SISTEMA, 28);
 }
 
 void imprimirAlumnoEnTxt(FILE	* archivo, Alumno alumno) {
@@ -171,13 +163,15 @@ void imprimirAlumnoEnTxt(FILE	* archivo, Alumno alumno) {
 	fprintf(archivo, "\n");
 }
 
-void constructorAlumno(char codigo[], char nombre[], char apellido[], char email[], long sistema, long planeta) {
-	strcpy(alumno->codigo, codigo);
-	strcpy(alumno->nombre, nombre);
-	strcpy(alumno->apellido, apellido);
-	strcpy(alumno->email, email);
-	alumno->codigoSistemaOrigen = sistema;
-	alumno->codigoPlanetaOrigen = planeta;
+Alumno constructorAlumno(char codigo[], char nombre[], char apellido[], char email[], long sistema, long planeta) {
+	Alumno alumno;
+	strcpy(alumno.codigo, codigo);
+	strcpy(alumno.nombre, nombre);
+	strcpy(alumno.apellido, apellido);
+	strcpy(alumno.email, email);
+	alumno.codigoSistemaOrigen = sistema;
+	alumno.codigoPlanetaOrigen = planeta;
+	return alumno;
 }
 
 void mostrarAlumno(Alumno alumno) {
