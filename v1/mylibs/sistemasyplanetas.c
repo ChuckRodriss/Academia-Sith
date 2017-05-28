@@ -12,7 +12,7 @@ const int SISTEMA_PLANETA_AGREGADO_CORRECTAMENTE = 127;
 // DEFINICIONES PEDIDAS
 void consultarSistemasYPlanetas() {
 	FILE * archivo = fopen(SISTEMAS_PLANETAS_DAT, "r");
-	long tope = cantidadSistemasPlanetas();
+	long tope = consultarCantidadSistemasPlanetas();
 	SistemaPlaneta sistemasYPlanetas[tope];
 	fread(sistemasYPlanetas, sizeof(SistemaPlaneta), tope, archivo);
 
@@ -33,7 +33,7 @@ int agregarPlaneta(char descripcion[]) {
 }
 
 // DEFINICIONES AUXILIARES
-long cantidadSistemasPlanetas() {
+long consultarCantidadSistemasPlanetas() {
 	long contador;
 	FILE * archivoSistemasPlanetas = fopen(CONTADOR_SISTPLAN_TXT, "r");
 	contador = leerLongDesdeTxt(archivoSistemasPlanetas);
@@ -50,7 +50,7 @@ long leerLongDesdeTxt(FILE * archivoAbierto) {
 SistemaPlaneta busquedaBinSistemasPlanetas(long codigoBuscado) {
 	// Ordenado Descendentemente
 	FILE * archivo = fopen(SISTEMAS_PLANETAS_DAT, "r");
-	long total = cantidadSistemasPlanetas();
+	long total = consultarCantidadSistemasPlanetas();
 	long inicio = 0, fin = total-1, centro, codigoActual;
 	SistemaPlaneta sistemasYPlanetas[total];
 

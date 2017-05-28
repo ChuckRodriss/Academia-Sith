@@ -18,7 +18,7 @@ int agregarPlaneta(char descripcion[]);
 void consultarSistemasYPlanetas();
 
 // DECLARACIONES AUXILIARES
-long cantidadSistemasPlanetas();
+long consultarCantidadSistemasPlanetas();
 long leerLongDesdeTxt(FILE * archivoAbierto);
 SistemaPlaneta busquedaBinSistemasPlanetas(long codigoBuscado);
 long incrementarContadorSistPlan();
