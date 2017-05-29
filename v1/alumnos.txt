@@ -5,6 +5,6 @@ def;asdA;ASDa;DSADAs;-125;4
 efg;asdA;ASDa;DSADAs;4;-124
 fgh;asdA;ASDa;DSADAs;7;-124
 ghi;asdA;ASDa;DSADAs;8;-124
-hij;asdA;ASDa;DSADAs;-125;10
-ijk;asdA;ASDa;DSADAs;-125;11
+hij;asdA;ASDa;DSADAs;-125;8
+ijk;asdA;ASDa;DSADAs;-125;9
 jkl;asdA;ASDa;DSADAs;-125;1
